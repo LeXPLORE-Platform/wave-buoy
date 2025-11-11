@@ -1,0 +1,30 @@
+Date;Time(UTC);ID;Type ;"Type;Parameters;model;S/N";Comments;Operator;miscellaneous
+06.04.2022;10:54:00;1;Installation;"buoy;N/A;CB-450;0438-21H19-001";Deploy wavebuoy;Damien Bouffard;Wavebuoy.jpg
+06.04.2022;14:00:00;1;Installation;"Wave sensor;Waves;SVS-603;wave01055";Start Measurement;Sébastien Lavanchy;Calibration_certificate_SN603HR0154_202102.pdf
+23.08.2023;07:45:00;2;Recovery/removal;"buoy;N/A;CB-450;0438-21H19-001";out for maintenance;Sébastien Lavanchy;
+23.08.2023;08:30:00;2;Maintenance;"buoy;N/A;CB-450;0438-21H19-001";Cleaning;Guillaume Cunillera;
+23.08.2023;09:00:00;2;Installation;"modem computer;N/A;X2-RB-DG24;2487-21J01-001";Move modem on an upper position;Sébastien Lavanchy;
+23.08.2023;13:00:00;2;Deployment/reinstalled;"buoy;N/A;CB-450;0438-21H19-001";Back to water;Guillaume Cunillera;
+17.10.2023;09:00:00;3;Recovery/removal;"buoy;N/A;CB-450;0438-21H19-001";B1 cable broke, chain removed, wave buoy moved;Guillaume Cunillera;
+17.10.2023;16:00:00;3;Deployment/reinstalled;"buoy;N/A;CB-450;0438-21H19-001";Wave buoy reinstalled between B3 and B4;Guillaume Cunillera;
+21.11.2023;10:00:00;4;Deployment/reinstalled;"modem computer;N/A;X2-RB-DG24;2487-21J01-001";New antenna to solve communication issue;Sébastien Lavanchy;
+22.11.2023;12:00:00;4;Issue;"buoy;N/A;CB-450;0438-21H19-001";communication issue, Nexsens: humidity inside buoy;Sébastien Lavanchy;
+07.12.2023;10:00:00;5;Recovery/removal;"buoy;N/A;CB-450;0438-21H19-001";Remove for EPFL full maintenance.;Sébastien Lavanchy;
+08.12.2023;12:00:00;5;Repair;"buoy;N/A;CB-450;0438-21H19-001";maintenance as described by Nexsens;Guillaume Cunillera;
+12.12.2023;13:00:00;5;Deployment/reinstalled;"buoy;N/A;CB-450;0438-21H19-001";reinstalled btw B3 and B4. Antenna outside;Guillaume Cunillera;
+12.01.2024;09:00:00;6;Issue;"buoy;N/A;CB-450;0438-21H19-001";Battery dead;Guillaume Cunillera;
+25.01.2024;12:00:00;6;Recovery/removal;"buoy;N/A;CB-450;0438-21H19-001";Buoy recovered for maintenance + battery change + dump of micro SD settings files (has to be checked by nexsens);Guillaume Cunillera;
+08.02.2024;12:00:00;6;Repair;"buoy;N/A;CB-450;0438-21H19-001";new battery, new micro SD card ;Guillaume Cunillera;
+08.02.2024;12:00:00;6;Issue;"buoy;N/A;CB-450;0438-21H19-001";3 P1-A connector wires damaged at the last closing;Guillaume Cunillera;
+08.02.2024;12:00:00;6;Repair;"buoy;N/A;CB-450;0438-21H19-001";repair wires connector P1-A (not used);Guillaume Cunillera;
+13.02.2024;14:00:00;6;Deployment/reinstalled;"buoy;N/A;CB-450;0438-21H19-001";redeployed;Guillaume Cunillera;
+07.08.2024;18:00:00;7;Issue;"buoy;N/A;CB-450;0438-21H19-001";PC1 froze;Guillaume Cunillera;
+08.08.2024;08:00:00;7;Repair;"buoy;N/A;CB-450;0438-21H19-001";PC1 restart;Guillaume Cunillera;
+29.08.2024;01:05:00;8;issue;"buoy;N/A;CB-450;0438-21H19-001";connection problem;Guillaume Cunillera;
+10.09.2024;12:00:00;8;Repair;"buoy;N/A;CB-450;0438-21H19-001";problem solved. All the previous data should be back in the pipeline;Guillaume Cunillera;
+06.01.2025;10:00:00;9;Recovery/removal;"buoy;N/A;CB-450;0438-21H19-001";battery low. Back at EPFL for maintenance;Guillaume Cunillera;
+10.01.2025;12:00:00;9;Deployment/reinstalled;"buoy;N/A;CB-450;0438-21H19-001";battery charged, reinstalled;Guillaume Cunillera;
+01.04.2025;07:30:00;10;Other;"Wave sensor;Waves;SVS-603;wave01055";change settings (onWQdatalive/device remote config) : sample 10min, log : 10min, transmit 30min;Guillaume Cunillera;
+01.04.2025;10:30:00;10;Other;"modem computer;N/A;X2-RB-DG24;2487-21J01-001";update Connect software on PC1 to V:4.25.3.7;Guillaume Cunillera;
+01.04.2025;13:50:00;10;Other;"Wave sensor;Waves;SVS-603;wave01055";change settings sample, log and transmit back to 60min;Guillaume Cunillera;
+03.07.2025;15:00:00;10;Other;"Wave sensor;Waves;SVS-603;wave01055";test new settings to increase the number of profiles / hour. FFTsize changed from 2018 to 1024 in the SVS603 settings via terminal. Log and sample intervals changed via WQ data live;Guillaume Cunillera;
