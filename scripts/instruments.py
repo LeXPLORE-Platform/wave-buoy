@@ -35,9 +35,9 @@ class WaveBuoy(GenericInstrument):
             'heading': {'var_name': 'heading', 'dim': ('time',), 'unit': 'deg', 'long_name': 'wave direction'},
             'mwd': {'var_name': 'mwd', 'dim': ('time',), 'unit': 'deg', 'long_name': 'mean wave direction'},
             'hmax': {'var_name': 'hmax', 'dim': ('time',), 'unit': 'm', 'long_name': 'max wave height'},
-            'te': {'var_name': 'te', 'dim': ('time',), 'unit': 'm', 'long_name': 'energy period'},
-            'pitch': {'var_name': 'pitch', 'dim': ('time',), 'unit': 'm', 'long_name': 'pitch'},
-            'roll': {'var_name': 'roll', 'dim': ('time',), 'unit': 'm', 'long_name': 'roll'},
+            'te': {'var_name': 'te', 'dim': ('time',), 'unit': 's', 'long_name': 'energy period'},
+            'pitch': {'var_name': 'pitch', 'dim': ('time',), 'unit': 'deg', 'long_name': 'pitch'},
+            'roll': {'var_name': 'roll', 'dim': ('time',), 'unit': 'deg', 'long_name': 'roll'},
         }
 
 
