@@ -32,7 +32,7 @@ class WaveBuoy(GenericInstrument):
             'tp': {'var_name': 'tp', 'dim': ('time',), 'unit': 's', 'long_name': 'wave period'},
             'wd': {'var_name': 'wd', 'dim': ('time',), 'unit': 'deg', 'long_name': 'wave direction'},
             'h10': {'var_name': 'h10', 'dim': ('time',), 'unit': 'm', 'long_name': 'highest 10% wave heights'},
-            'heading': {'var_name': 'heading', 'dim': ('time',), 'unit': 'deg', 'long_name': 'wave direction'},
+            'heading': {'var_name': 'heading', 'dim': ('time',), 'unit': 'deg', 'long_name': 'heading'},
             'mwd': {'var_name': 'mwd', 'dim': ('time',), 'unit': 'deg', 'long_name': 'mean wave direction'},
             'hmax': {'var_name': 'hmax', 'dim': ('time',), 'unit': 'm', 'long_name': 'max wave height'},
             'te': {'var_name': 'te', 'dim': ('time',), 'unit': 's', 'long_name': 'energy period'},
