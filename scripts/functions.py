@@ -1,33 +1,94 @@
-import json
-import numpy as np
-from envass import qualityassurance
-from datetime import datetime
+# -*- coding: utf-8 -*-
+import os
 import copy
+import json
+import ftplib
+import netCDF4
+import numpy as np
+import pandas as pd
+from shutil import move
+from scipy.interpolate import griddata
+from datetime import datetime, timedelta
+from math import sin, cos, sqrt, atan2, radians
+from dateutil.relativedelta import relativedelta
+from envass import qualityassurance
+from general.functions import logger
 
-def copy_variables(variables_dict):
-    var_dict = dict()
-    for var in variables_dict:
-        var_dict[var] = variables_dict[var][:]
-    nc_copy = copy.deepcopy(var_dict)
-    return nc_copy
-    
-def log(str, indent=0, start=False):
-    if start:
-        out = "\n" + str + "\n"
-        with open("log.txt", "w") as file:
-            file.write(out + "\n")
-    else:
-        out = datetime.now().strftime("%H:%M:%S.%f") + (" " * 3 * (indent + 1)) + str
-        with open("log.txt", "a") as file:
-            file.write(out + "\n")
-    print(out)
 
-    
-def error(str):
-    out = datetime.now().strftime("%H:%M:%S.%f") + "   ERROR: " + str
-    with open("log.txt", "a") as file:
-        file.write(out + "\n")
-    raise ValueError(str)
+def retrieve_new_files(folder, creds, server_location="data", filetype=".csv", remove=False, overwrite=False, log=logger()):
+    files = []
+    log.info("Connecting to {}.".format(creds["ftp"]), indent=1)
+    ftp = ftplib.FTP(creds["ftp"], timeout=100)
+    ftp.login(creds["user"], creds["password"])
+    server_files = ftp.nlst(server_location)
+    local_files = os.listdir(folder)
+    for file in server_files:
+        file_name = os.path.basename(file)
+        if file.endswith(filetype) and (overwrite or file_name not in local_files):
+            log.info("Downloading file {}".format(file), indent=2)
+            download_file(file, os.path.join(folder, file_name), ftp)
+            if remove:
+                ftp.delete(file)
+            files.append(os.path.join(folder, file_name))
+    files.sort()
+    return files
+
+
+def download_file(server, local, ftp):
+    with open(local, "wb") as f:
+        ftp.retrbinary("RETR " + server, f.write)
+
+
+def merge_files(output_folder, new_files):
+    files = []
+    for file in new_files:
+        try:
+            file_name = os.path.basename(file)
+            day_name = "WaveBuoy_" + file_name.split("_")[1] + ".csv"
+            day_file = os.path.join(output_folder, day_name)
+            if os.path.isfile(day_file):
+                df1 = pd.read_csv(day_file, header=None)
+                df2 = pd.read_csv(file, header=None)
+                df = pd.concat([df1, df2], ignore_index=True)
+                df = df.drop_duplicates(subset=df.columns[1], keep='last')
+                df = df.sort_values(by=[df.columns[0], df.columns[1]])
+                df.to_csv(day_file, index=False, header=False)
+                os.remove(file)
+            else:
+                os.rename(file, day_file)
+            if day_file not in files:
+                files.append(day_file)
+        except:
+            raise
+            print("Failed to merge: {}".format(file))
+    files.sort()
+    return files
+
+
+def interp_nan_grid(time, depth, temp, method='linear'):
+    temp_qual = np.ma.masked_invalid(temp).mask
+    time_index = np.arange(0, len(time), 1)
+    depth_index = np.arange(0, len(depth), 1)
+
+    time_grid, depth_grid = np.meshgrid(time_index, depth_index)
+
+    tempval = temp[~temp_qual]
+    timeval = time_grid[~temp_qual]
+    depthval = depth_grid[~temp_qual]
+
+    temp_interp = griddata((timeval, depthval), tempval, (time_grid, depth_grid), method=method)
+    return temp_interp
+
+
+def interp_rescale(time, depth, time_grid, depth_grid, temp, method='linear'):
+    time_index = np.arange(0, len(time), 1)
+    time_mesh, depth_mesh = np.meshgrid(time_index, depth)
+    time_grid_index = np.arange(0, len(time_grid), 1)
+    time_mesh_grid, depth_mesh_grid = np.meshgrid(time_grid_index, depth_grid)
+
+    temp_rescaled = griddata((time_mesh.ravel(), depth_mesh.ravel()), temp.ravel(), (time_mesh_grid, depth_mesh_grid),
+                             method=method)
+    return temp_rescaled
 
 
 def find_closest_index(arr, value):
@@ -43,17 +104,6 @@ def is_number(n):
         return True
 
 
-def json_converter(quality_assurance_dict):
-    for key in quality_assurance_dict:
-        for check_type in quality_assurance_dict[key]:   
-            for check in quality_assurance_dict[key][check_type]:
-                if "now" in quality_assurance_dict[key][check_type][check]:
-                    quality_assurance_dict[key][check_type][check][1] = datetime.now().timestamp()
-                if quality_assurance_dict[key][check_type][check] == "True":
-                    quality_assurance_dict[key][check_type][check] = True
-    return quality_assurance_dict
-
-
 def isnt_number(n):
     try:
         float(n)
@@ -61,21 +111,3 @@ def isnt_number(n):
         return True
     else:
         return False
-
-
-def advanced_quality_flags(df, json_path="quality_assurance.json"):
-    """
-        input :
-            - df is a dataframe of level 1B where basic check have been performed
-            - json path: path for the advanced quality check json file, produced by the jupyter notebook
-        output:
-            - dictionnary where the dataframe is stored with updated advanced quality checks
-        """
-    quality_assurance_dict = json.load(open(json_path))
-    var_name = quality_assurance_dict.keys()
-    advanced_df = df.copy()
-    for var in var_name:
-        if quality_assurance_dict[var]:
-            qa = qualityassurance(np.array(df[var]), np.array(df["time"]), **quality_assurance_dict[var]["advanced"])
-            advanced_df[var + "_qual"][np.array(qa, dtype=bool)] = 1
-    return advanced_df

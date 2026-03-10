@@ -50,7 +50,7 @@ def sync_files(warning=True, delete=False):
 
 
 def get_uri():
-    hosts = ["renkulab.io", "github.com", "gitlab.com", "gitlab.renkulab.io", "gitlab.eawag.ch"]
+    hosts = ["renkulab.io", "github.com", "gitlab.com", "gitlab.renkulab.io"]
     folder = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     bucket_file = os.path.join(folder, ".bucket")
     data_folder = os.path.join(folder, "data")
@@ -63,11 +63,13 @@ def get_uri():
     if "git@" in remote:
         remote = str(check_output(["git", "remote", "-v"])).split("git@", 1)[1].split(".git", 1)[0].split(":")
         host = remote[0]
-        repository = remote[1]
+        group = remote[1].split("/")[0]
+        repository = remote[1].split("/")[1]
     elif "https://" in remote:
         remote = str(check_output(["git", "remote", "-v"])).split("https://", 1)[1].split(".git", 1)[0].split("/")
         host = remote[0]
-        repository = "/".join(remote[1:])
+        group = remote[-2]
+        repository = remote[-1]
     else:
         raise ValueError("Unrecognized output from git remote -v: {}".format(remote))
 
@@ -79,7 +81,7 @@ def get_uri():
         bucket = file.read().rstrip()
 
     bucket_name = bucket.replace("https://", "").split(".")[0]
-    uri = "s3://{}/{}/{}/data".format(bucket_name, host, repository)
+    uri = "s3://{}/{}/{}/{}/data".format(bucket_name, host, group, repository)
 
     return data_folder, uri
 

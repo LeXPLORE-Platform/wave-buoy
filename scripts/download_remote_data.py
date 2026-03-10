@@ -5,7 +5,7 @@ from subprocess import check_output, Popen, PIPE
 
 
 def download_remote_data(warning=True, delete=False):
-    hosts = ["renkulab.io", "github.com", "gitlab.com", "gitlab.renkulab.io", "gitlab.eawag.ch"]
+    hosts = ["renkulab.io", "github.com", "gitlab.com", "gitlab.renkulab.io"]
     folder = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), ".."))
     bucket_file = os.path.join(folder, ".bucket")
     data_folder = os.path.join(folder, "data")
@@ -18,11 +18,13 @@ def download_remote_data(warning=True, delete=False):
     if "git@" in remote:
         remote = str(check_output(["git", "remote", "-v"])).split("git@", 1)[1].split(".git", 1)[0].split(":")
         host = remote[0]
-        repository = remote[1]
+        group = remote[1].split("/")[0]
+        repository = remote[1].split("/")[1]
     elif "https://" in remote:
         remote = str(check_output(["git", "remote", "-v"])).split("https://", 1)[1].split(".git", 1)[0].split("/")
         host = remote[0]
-        repository = "/".join(remote[1:])
+        group = remote[-2]
+        repository = remote[-1]
     else:
         raise ValueError("Unrecognized output from git remote -v: {}".format(remote))
 
@@ -34,7 +36,7 @@ def download_remote_data(warning=True, delete=False):
         bucket = file.read().rstrip()
 
     bucket_name = bucket.replace("https://", "").split(".")[0]
-    bucket_uri = "s3://{}/{}/{}/data".format(bucket_name, host, repository)
+    bucket_uri = "s3://{}/{}/{}/{}/data".format(bucket_name, host, group, repository)
 
     try:
         check_output(["aws", "s3", "ls", bucket_uri, "--no-sign-request"])
@@ -73,4 +75,4 @@ if __name__ == "__main__":
     parser.add_argument('--warning', '-w', help="Remove change warning for automation.", action='store_false')
     parser.add_argument('--delete', '-d', help="Delete files for full sync.", action='store_true')
     args = vars(parser.parse_args())
-    download_remote_data(warning=args["warning"], delete=args["delete"])
+    download_remote_data(warning=args["warning"], delete=args["warning"])
