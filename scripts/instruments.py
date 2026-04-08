@@ -54,6 +54,14 @@ class WaveBuoy1(WaveBuoy):
                                         utc=True).values.astype(
                 float) / 10 ** 9
             df = df.sort_values(by=['time'])
+            now_ts = datetime.now(timezone.utc).timestamp()
+            start_2022_ts = datetime(2022, 1, 1, tzinfo=timezone.utc).timestamp()
+            df = df[(df['time'] >= start_2022_ts) & (df['time'] <= now_ts)]
+            
+            if len(df) == 0:
+                self.log.info("No valid data found after filtering {}".format(file), 1)
+                return False
+            
             empty = np.empty((len(df)))
             empty[:] = np.nan
             for variable in self.variables:
@@ -79,6 +87,16 @@ class WaveBuoy2(WaveBuoy):
             df['time'] = pd.to_datetime(df["DATE"] + " " + df["TIME"], format='%Y-%m-%d %H:%M:%S', utc=True).values.astype(
                     float) / 10 ** 9
             df = df.sort_values(by=['time'])
+            
+            # Filter out data: future timestamps and before 2022
+            now_ts = datetime.now(timezone.utc).timestamp()
+            start_2022_ts = datetime(2022, 1, 1, tzinfo=timezone.utc).timestamp()
+            df = df[(df['time'] >= start_2022_ts) & (df['time'] <= now_ts)]
+            
+            if len(df) == 0:
+                self.log.info("No valid data found after filtering {}".format(file), 1)
+                return False
+            
             empty = np.empty((len(df)))
             empty[:] = np.nan
             for variable in self.variables:
