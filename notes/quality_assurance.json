@@ -11,6 +11,6 @@
   "heading": { "simple": { "numeric": "True", "bounds": [0, 360] }, "advanced": {} },
   "mwd": { "simple": { "numeric": "True", "bounds": [0, 360] }, "advanced": {} },
   "te": { "simple": { "numeric": "True" }, "advanced": {} },
-  "pitch": { "simple": { "numeric": "True" }, "advanced": {} },
-  "roll": { "simple": { "numeric": "True" }, "advanced": {} }
+  "pitch": { "simple": { "numeric": "True", "bounds": [-90, 90] }, "advanced": {} },
+  "roll": { "simple": { "numeric": "True", "bounds": [-90, 90] }, "advanced": {} }
 }

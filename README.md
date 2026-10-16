@@ -68,22 +68,23 @@ Since 17.10.2023, the buoy is located 30 m South - West of LéXPLORE: 46°29′5
  The python version can be checked by running the command `python --version`. In case python is not installed or only an older version of it, it is recommend to install python through the anaconda distribution which can be downloaded [here](https://www.anaconda.com/products/individual). 
 
 
-### Process new data
+### Process data
 
-In order to process new data locally on your machine the file path needs to be adapted to your local file system. The following steps are therefore necessary: 
+`scripts/main.py` processes the wave buoy data in `data/Level0` (`v1` and `v2` logger formats) to Level 1.
 
-- Edit the `scripts/input_batch.bat` file. Change all the directory paths to match your local file system. This file contains all the file paths necessary to launch the batch scripts `runfile.bat`.
+- `python scripts/main.py --server` downloads new files from the FTP server (requires `creds.json`, see `creds_example.json`) and processes only those.
+- `python scripts/main.py` reprocesses every file in `data/Level0`.
 
-- Edit the `scripts/input_python.py` file. Change all the directory paths to match your local file system. This file contains all the directories where the python script outputs data to.
+Data already in the Level 1 files is not overwritten. To reprocess the complete dataset (for example after editing
+`notes/events.csv` or `notes/quality_assurance.json`), empty `data/Level1` first.
 
-To process new data, place the data in the input directory which you specified in the `scripts/input_batch.bat` file. Double-clicking on the `runfile.bat` file will automatically 
-process all the data in the input directory and store the output in the directories specified in the `scripts/input_python.py` file. 
+Run `python scripts/main.py -h` for details on the input arguments available. `scripts/pipeline.py` wraps `main.py` with
+the download and upload steps used operationally (see `entrypoint.sh`).
 
 ### Adapt/Extend data processing pipeline
 
-The python script `scripts/main.py` defines the different processing steps while the python script `scripts/surfacewaves.py` contains the python class surfacewaves with all the corresponding 
-class methods to process the data. To add a new processing or visualization step, a new class method can be created in the `surfacewaves.py` file and the step can be added in `main.py` file.
-Both above mentioned python scripts are independent of the local file system.
+`scripts/main.py` defines the processing steps, and `scripts/instruments.py` contains the `WaveBuoy1` and `WaveBuoy2` classes
+(one per logger format) with the methods that process the data. Methods shared with other LéXPLORE datasets are in `scripts/general/functions.py`.
 
 
 ## Data
@@ -146,19 +147,26 @@ Quality checks include but are not limited to range validation, data type checki
 * "hs": numeric, bounds: [0, 5],
 * "tp": numeric, bounds: [0, 40],
 * "wd": numeric, bounds: [0, 360], 
-* "h10": numeric, bounds: [0, 5].
+* "h10": numeric, bounds: [0, 5],
+* "pitch": numeric, bounds: [-90, 90],
+* "roll": numeric, bounds: [-90, 90].
 
-Advanced quality assurance can be run using the `scripts/quality_assurance.py` function. In order to better define the quality assurance users can interact with the data and define new quality assurance checks in `notebooks/define_quality assurance.ipynb`.
+### Events
 
+Maintenance dates, sensor problems and other events not identified by the automatic quality assurance are listed in `notes/events.csv`
+(one file for both the `v1` and `v2` data). These events are applied to the quality flags (`<variable>_qual = 1`) when the data are processed to Level 1.
+The file is semicolon separated with the columns `start;stop;parameter;depth;comments`:
 
+- `start`, `stop`: UTC, format `YYYYMMDD HH:MM:SS` (zero padded, inclusive). An empty `stop` means the event is ongoing.
+  Only samples inside the window are flagged.
+- `parameter`: `All` or a comma separated list of variable names as they appear in the Level 1 files
+  (`hs`, `tp`, `wd`, `h10`, `heading`, `mwd`, `hmax`, `te`, `pitch`, `roll`), e.g. `hs,h10`.
+- `depth`: not used for this dataset, leave empty.
+- `comments`: free text description of the event. If it contains a `;`, put it in double quotes.
 
-
-
-
-###  Events 
-
-Maintenance dates, interesting or surprising events, non identified by the basic quality check are listed in `notes/events`.
-Check also the `notes/sensor_history`.
+Events added for data that was already processed only take effect after reprocessing the complete dataset (see [Process data](#process-data)).
+Problems in the events file are logged as warnings and do not stop processing.
+Check also `notes/sensors_history.csv`.
 
 ## Collaborators
 

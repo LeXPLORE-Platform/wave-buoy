@@ -1,19 +1,5 @@
-Start date;Start time;Stop date;Stop time;parameter;Comments;Operator
-20021019;13:20:00;20221026;13:40:00;all;Bad com, extrafile;Sebastien Lavanchy
-;;;;;;
-;;;;;;
-;;;;;;
-;;;;;;
-;;;;;;
-;;;;;;
-;;;;;;
-;;;;;;
-;;;;;;
-;;;;;;
-;;;;;;
-;;;;;;
-;;;;;;
-;;;;;;
-;;;;;;
-;;;;;;
-;;;;;;
+start;stop;parameter;depth;comments
+20221019 13:20:00;20221026 13:40:00;All;;Bad com, extrafile (Sebastien Lavanchy)
+20231017 09:00:00;20231017 16:00:00;All;;Buoy recovered and moved between B3 and B4 after B1 cable broke (Guillaume Cunillera)
+20250106 10:00:00;20250110 12:00:00;All;;Buoy out of the water for maintenance at EPFL, battery low (Guillaume Cunillera)
+20250401 08:10:00;20250401 13:50:00;All;;Invalid values while testing 10 min sample/log settings (Guillaume Cunillera)

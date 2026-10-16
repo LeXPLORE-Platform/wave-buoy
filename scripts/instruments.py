@@ -50,9 +50,8 @@ class WaveBuoy1(WaveBuoy):
                 self.log.info("No data found in {}".format(file), 1)
                 return False
             df.columns = ["DATE", "TIME", "heading", "hs", "tp", "wd", "mwd", "hmax", "h10", "pitch", "roll"]
-            df['time'] = pd.to_datetime(df["DATE"] + " " + df["TIME"], format='%Y-%m-%d %H:%M:%S',
-                                        utc=True).values.astype(
-                float) / 10 ** 9
+            df['time'] = (pd.to_datetime(df["DATE"] + " " + df["TIME"], format='%Y-%m-%d %H:%M:%S', utc=True)
+                          - pd.Timestamp(0, tz="UTC")).dt.total_seconds()
             df = df.sort_values(by=['time'])
             now_ts = datetime.now(timezone.utc).timestamp()
             start_2022_ts = datetime(2022, 1, 1, tzinfo=timezone.utc).timestamp()
@@ -84,8 +83,8 @@ class WaveBuoy2(WaveBuoy):
                 self.log.info("No data found in {}".format(file), 1)
                 return False
             df.columns = ["DATE", "TIME", "heading", "hs", "tp", "wd", "mwd", "hmax", "h10", "te", "pitch", "roll"]
-            df['time'] = pd.to_datetime(df["DATE"] + " " + df["TIME"], format='%Y-%m-%d %H:%M:%S', utc=True).values.astype(
-                    float) / 10 ** 9
+            df['time'] = (pd.to_datetime(df["DATE"] + " " + df["TIME"], format='%Y-%m-%d %H:%M:%S', utc=True)
+                          - pd.Timestamp(0, tz="UTC")).dt.total_seconds()
             df = df.sort_values(by=['time'])
             
             # Filter out data: future timestamps and before 2022
