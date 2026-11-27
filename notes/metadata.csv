@@ -28,3 +28,12 @@ Date;Time(UTC);ID;Type ;"Type;Parameters;model;S/N";Comments;Operator;miscellane
 01.04.2025;10:30:00;10;Other;"modem computer;N/A;X2-RB-DG24;2487-21J01-001";update Connect software on PC1 to V:4.25.3.7;Guillaume Cunillera;
 01.04.2025;13:50:00;10;Other;"Wave sensor;Waves;SVS-603;wave01055";change settings sample, log and transmit back to 60min;Guillaume Cunillera;
 03.07.2025;15:00:00;10;Other;"Wave sensor;Waves;SVS-603;wave01055";test new settings to increase the number of profiles / hour. FFTsize changed from 2018 to 1024 in the SVS603 settings via terminal. Log and sample intervals changed via WQ data live;Guillaume Cunillera;
+03.07.2025;00:10:00;11;Issue;"Wave sensor;Waves;SVS-603;wave01055";Data unreliable ? Settings doesn't seem to work as expected;Guillaume Cunillera;
+14.07.2025;11:00:00;12;Other;"Wave sensor;Waves;SVS-603;wave01055";log and sample intervals back to 60min;Guillaume Cunillera;
+30.07.2025;14:00:00;11;Repair;"Wave sensor;Waves;SVS-603;wave01055";back to initial settings;Guillaume Cunillera;
+13.08.2025;12:00:00;13;Recovery/removal;"buoy;N/A;CB-450;0438-21H19-001";back at EPFL, sensors and X2s will be sent to Nexsens for tune-up;Guillaume Cunillera;
+26.02.2026;17:00:00;13;Deployment/reinstalled;"buoy;N/A;CB-450;0438-21H19-001";back in the lake after some tests at EPFL. New X2-R-DG-20133  project on Wqdatalive. New python hex translater will be finished in the coming days. ;Guillaume Cunillera;
+20.05.2026;04:00:00;14;Issue;"buoy;N/A;CB-450;0438-21H19-001";Not working anymore;Jeremy Keller;
+02.06.2026;12:00:00;14;Recovery/removal;"buoy;N/A;CB-450;0438-21H19-001";Wavebuoy recovery for repairing;Jeremy Keller;
+24.09.2026;12:00:00;14;Repair;"buoy;N/A;CB-450;0438-21H19-001";Sent to Nexsens for repair;Jeremy Keller;
+12.11.2026;15:00:00;14;Deployment/reinstalled;"buoy;N/A;CB-450;0438-21H19-001";Back in the lake;Jeremy Keller;
